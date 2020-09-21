@@ -20,33 +20,33 @@ import com.picktime.service.UserService;
 public class UserController {
 
 	ObjectMapper objectMapper = new ObjectMapper();
-    
+       
     @Autowired
     UserService userService; 
 
     @RequestMapping("/login")
     public String login(Model model) {
-    	System.out.println("UserController.login()");
+    	System.out.println("Login request");
         return "login";
     }
     
     
     @RequestMapping("/signup")
     public String signup(Model model) {
-    	System.out.println("UserController.signup()");
+    	System.out.println("Signup request");
         return "signup";
     }
 
     @RequestMapping("/index")
     public String index(Model model) {
-    	System.out.println("UserController.index()");
+    	System.out.println("Index Page request");
         model.addAttribute("users", userService.getAllUsers());
         return "index";
     }
     
     @RequestMapping("/checkLogin")
     public String checkLogin(@RequestParam String firstname, @RequestParam String lastname, @RequestParam String password,Model model,HttpSession session) throws JsonProcessingException {
-    	System.out.println("UserController.index()");
+    	System.out.println("Checking Login request");
     	
     	User user = userService.checkUser(firstname,lastname,password);
     	if(user!=null && user.getId().length()>0){
@@ -62,7 +62,7 @@ public class UserController {
 
     @RequestMapping("/save")
     public String save(@RequestParam String firstname, @RequestParam String lastname, @RequestParam String password,Model model,HttpSession session) {
-    	System.out.println("UserController.save()");
+    	System.out.println("Signup Save request");
     	User user = userService.saveUser(firstname,lastname,password);
     	if(user!=null && !user.getId().isEmpty()){
     		model.addAttribute("user", user);
@@ -77,7 +77,7 @@ public class UserController {
 
     @RequestMapping("/show")
     public String show(Model model,HttpSession session) throws JsonProcessingException {
-    	System.out.println("UserController.show()"+objectMapper.writeValueAsString(model));
+    	System.out.println("After signup/login request");
     	
     	String userId = (String) session.getAttribute("userId");
     	Optional<User> optional = userService.getUser(userId);
@@ -93,7 +93,7 @@ public class UserController {
     
     @RequestMapping("/logout/{id}")
     public String logout(@PathVariable String id, Model model,HttpSession session) {
-    	System.out.println("UserController.logout() id==>"+id);
+    	System.out.println("Logout request");
     	session.setAttribute("userId",null);
     	model.addAttribute("user", null);
         return "redirect:/index";
