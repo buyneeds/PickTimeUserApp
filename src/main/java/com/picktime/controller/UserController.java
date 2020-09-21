@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -25,27 +27,27 @@ public class UserController {
     @Autowired
     UserService userService; 
 
-    @RequestMapping("/login")
+    @RequestMapping(value = "/login")
     public String login(Model model) {
     	System.out.println("Login request");
         return "login";
     }
     
     
-    @RequestMapping("/signup")
+    @RequestMapping(value = "/signup")
     public String signup(Model model) {
     	System.out.println("Signup request");
         return "signup";
     }
 
-    @RequestMapping("/index")
+    @RequestMapping(value = "/index")
     public String index(Model model) {
     	System.out.println("Index Page request");
         model.addAttribute("users", userService.getAllUsers());
         return "index";
     }
     
-    @RequestMapping("/checkLogin")
+    @RequestMapping(value = "/checkLogin")
     public String checkLogin(@RequestParam String firstname, @RequestParam String lastname, @RequestParam String password,Model model,HttpSession session) {
     	System.out.println("Checking Login request");
     	
@@ -61,7 +63,7 @@ public class UserController {
 		return "index";
     }
 
-    @RequestMapping("/save")
+    @RequestMapping(value = "/save")
     public String save(@RequestParam String firstname, @RequestParam String lastname, @RequestParam String password,Model model,HttpSession session) {
     	System.out.println("Signup Save request");
     	User user = userService.saveUser(firstname,lastname,password);
@@ -76,7 +78,7 @@ public class UserController {
     	}
     }
 
-    @RequestMapping("/show")
+    @RequestMapping(value = "/show")
     public String show(Model model,HttpSession session) throws JsonProcessingException {
     	System.out.println("After signup/login request");
     	
@@ -96,7 +98,7 @@ public class UserController {
     	return "redirect:/index";
     }
     
-    @RequestMapping("/logout/{id}")
+    @RequestMapping(value = "/logout/{id}")
     public String logout(@PathVariable String id, Model model,HttpSession session) {
     	System.out.println("Logout request");
     	session.setAttribute("userId",null);
