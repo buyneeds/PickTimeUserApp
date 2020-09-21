@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.picktime.dao.User;
+import com.picktime.exception.UserException;
 import com.picktime.service.UserService;
 
 @Controller
@@ -45,16 +46,16 @@ public class UserController {
     }
     
     @RequestMapping("/checkLogin")
-    public String checkLogin(@RequestParam String firstname, @RequestParam String lastname, @RequestParam String password,Model model,HttpSession session) throws JsonProcessingException {
+    public String checkLogin(@RequestParam String firstname, @RequestParam String lastname, @RequestParam String password,Model model,HttpSession session) {
     	System.out.println("Checking Login request");
     	
     	User user = userService.checkUser(firstname,lastname,password);
-    	if(user!=null && user.getId().length()>0){
-	    	model.addAttribute("message", "Logged in successfully..");
+		if(user!=null && user.getId().length()>0){
+			model.addAttribute("message", "Logged in successfully..");
 			model.addAttribute("user", user);
 			session.setAttribute("userId", user.getId());
 			return "redirect:/show";
-    	}
+		}
 		model.addAttribute("message", "Login failed..");
 		model.addAttribute("users", userService.getAllUsers());
 		return "index";
@@ -79,13 +80,17 @@ public class UserController {
     public String show(Model model,HttpSession session) throws JsonProcessingException {
     	System.out.println("After signup/login request");
     	
-    	String userId = (String) session.getAttribute("userId");
-    	Optional<User> optional = userService.getUser(userId);
-    	if(optional.isPresent()){
-	    	model.addAttribute("message", "Logged in successfully..");
-	        model.addAttribute("user", optional.get());
-	        return "dashboard";
-    	}
+    	try {
+			String userId = (String) session.getAttribute("userId");
+			Optional<User> optional = userService.getUser(userId);
+			if(optional.isPresent()){
+				model.addAttribute("message", "Logged in successfully..");
+			    model.addAttribute("user", optional.get());
+			    return "dashboard";
+			}
+		} catch (Exception e) {
+			new UserException(e);
+		}
     	session.setAttribute("userId",null);
     	model.addAttribute("message", "Invalid Session..");
     	return "redirect:/index";
