@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.pictime</groupId>
-	<artifactId>PickTimeUserApp</artifactId>
+	<artifactId>buyneeds</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>PickTimeUserApp</name>
-	<description>Demo project for PickTimeUserApp</description>
+	<name>buyneeds</name>
+	<description>Demo project for BuyNeedsApp</description>
 
 	<properties>
 		<java.version>1.8</java.version>
